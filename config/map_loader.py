@@ -19,7 +19,7 @@ class TileMap:
                 for x, y, gid in layer:
                     tile = tID(gid)
                     if tile:
-                        temp_tile = ((x*self.tmx_map.tilewidth, y*self.tmx_map.tileheight), )
+                        temp_tile = tile_sprite((x*self.tmx_map.tilewidth, y*self.tmx_map.tileheight), )
 
 class tile_sprite(pygame.sprite.Sprite):
     def __init__(self, pos, tile):
