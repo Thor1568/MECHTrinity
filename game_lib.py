@@ -7,13 +7,18 @@ import os
 import sys
 import threading
 
+
 #menu_nav scripts
 class menu(pygame.Surface):
     def __init__(self, width, height):
         pygame.Surface.__init__(self, size=(width, height))
-        self.bg_img = pygame.image.load("stars1.png")
-        self.blit(self.bg_img, (0,0))
-
+        self.state = 0
+        self.bg_img = pygame.image.load(img_dir+"stars1.png")
+        self.play_button = Button(img_dir+"testbutton.png", (0, 0))
+        self.play_button_text = self.play_button.add_text("Play", 32)
+        self.instruct_button = Button(img_dir+"testbutton.png", (400, 300))
+        self.buttons = pygame.sprite.LayeredUpdates()
+        self.buttons.add(self.play_button, self.instruct_button)
 
     def instructions(self):
         pass
@@ -31,7 +36,47 @@ class menu(pygame.Surface):
         pass
 
     def render(self, display):
-        display.blit(self, (0,0))
+        if self.state == 0:
+            self.blit(self.bg_img, (0,0))
+            display.blit(self, (0,0))
+            self.buttons.draw(display)
+            display.blit(self.play_button_text, ((self.play_button.return_pos())[0], (self.play_button.return_pos())[1]))
+
+
+    def handle_mouse(self, mouse):
+        #Passes mouse tuple to buttons currently drawn on menu
+        sprite_list = []
+        for sprite in self.buttons:
+            test = sprite.ifclick(mouse)
+            if test == True:
+                sprite_list.append(sprite)
+        return sprite_list
+
+class Button(pygame.sprite.Sprite):
+    def __init__(self, img_path, pos):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(img_path)
+        self.rect = self.image.get_rect()
+        self.rect.x = pos[0]
+        self.rect.y = pos[1]
+        self.place = pos
+
+    def ifclick(self, mouse):
+        if mouse[0] == 1:
+            if ((mouse[1] > self.rect.left) and (mouse[1] < self.rect.right)) and ((mouse[2] > self.rect.bottom) and (mouse[2] < self.rect.top)):
+                return True
+            else:
+                return False
+        else:
+            return False
+
+    def add_text(self, text, size):
+        self.text = text
+        self.font = pygame.font.Font("freesansbold.ttf", size)
+        self.text_surf = self.font.render(self.text, False, BLACK)
+        return self.text_surf
+    def return_pos(self):
+        return self.place
 
 #Networking classes
 #In progress networking classes
