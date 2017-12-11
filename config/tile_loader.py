@@ -4,6 +4,7 @@ import os
 from pytmx.util_pygame import load_pygame
 from time import sleep
 
+
 #Partially my code but some is edited from a yt video of: https://www.youtube.com/watch?v=QIXyj3WeyZM&list=PLsk-HSGFjnaGQq7ybM8Lgkh5EMxUWPm2i&index=12
 #Also from https://www.youtube.com/watch?v=Mr5l4U9S4kI
 class TileMap:
@@ -20,9 +21,9 @@ class TileMap:
         for layer in self.tmx_map.visible_layers:
             if isinstance(layer, pytmx.TiledTileLayer):
                 for x, y, gid in layer:
-                    tile = tID(gid)
-                    if tile:
-                        temp_tile = tile_sprite((x*self.tmx_map.tilewidth, y*self.tmx_map.tileheight), tile)
+                    tile_img = tID(gid)
+                    if tile_img:
+                        temp_tile = tile_sprite((x*self.tmx_map.tilewidth, y*self.tmx_map.tileheight), tile_img)
                         tiles_group.add(temp_tile)
 
         return tiles_group
@@ -83,6 +84,8 @@ def main():
         pygame.display.flip()
 
 if __name__ == "__main__":
+    pygame.init()
+    pygame.display.init()
     main()
 
 print(tiles_group)
