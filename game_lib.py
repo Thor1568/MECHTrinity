@@ -63,7 +63,7 @@ class Button(pygame.sprite.Sprite):
 
     def ifclick(self, mouse):
         if mouse[0] == 1:
-            if ((mouse[1] > self.rect.left) and (mouse[1] < self.rect.right)) and ((mouse[2] > self.rect.bottom) and (mouse[2] < self.rect.top)):
+            if ((mouse[1] > self.rect.left) and (mouse[1] < self.rect.right)) and ((mouse[2] < self.rect.bottom) and (mouse[2] > self.rect.top)):
                 return True
             else:
                 return False
@@ -75,6 +75,7 @@ class Button(pygame.sprite.Sprite):
         self.font = pygame.font.Font("freesansbold.ttf", size)
         self.text_surf = self.font.render(self.text, False, BLACK)
         return self.text_surf
+
     def return_pos(self):
         return self.place
 
@@ -84,28 +85,27 @@ class Server:
     def __init__(self, timeout, max_users):
         socket.setdefaulttimeout(timeout)
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.port = 6573
+        self.port = game_port
         self.host_name = socket.gethostname()
         self.ip = socket.gethostbyname(self.host_name)
-        self.sock.bind((self.ip, 6573))
+        self.sock.bind((self.ip, game_port))
         self.sock.listen(max_users)
         self.addresses = []
         self.conns = []
 
     def work(self):
         #Function that will be run and maintains connections between each Client and is run by thread
-        while True:
-            try:
-                c, addr = self.sock.accept()
-                self.addresses.append(addr)
-                self.conns.append(c)
-            except:
-                pass
+        try:
+            c, addr = self.sock.accept()
+            self.addresses.append(addr)
+            self.conns.append(c)
+        except:
+            pass
 
 
-    def recieve(self):
-        data = self.sock.recv(1024)
-        data = tuple(data.decode())
+    def recieve(self, connection):
+        data = connection.recv(1024)
+        data = data.decode()
         return data
 
     def myInfo(self):
@@ -114,10 +114,13 @@ class Server:
     def myConns(self):
         return self.conns
 
+    def broadcast(self, msg):
+        self.sock.sendall(msg.encode())
+
 class Client:
     def __init__(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.port = 6573
+        self.port = game_port
         self.host = socket.gethostname()
         #Two connection methods self.connect((ip, port)) or self.create_connection((ip, port))
 
@@ -133,13 +136,20 @@ class Client:
         pass
 
     def transmit(self, data):
-        data = str((data, self.host))
-        data = data.encode()
-        self.sock.send(data)
+        data_temp = str(data)
+        host_temp = str(self.host)
+        data_temp = (data_temp + " " + host_temp)
+        self.last_send = data_temp
+        data_temp = data_temp.encode()
+        self.sock.send(data_temp)
+
 
     def recieve(self):
         data = self.sock.recv(1024)
         data = tuple(data.decode())
+        if data != self.last_send:
+            return data
+
         return data
 
 class Player(pygame.sprite.Sprite):
@@ -251,6 +261,13 @@ class myTilemap(pygame.sprite.Sprite):
     def return_img(self):
         return self.image
 
+class Game(pygame.Surface):
+    def __init__(self, width, height):
+        pygame.Surface.__init__(self, size=(width, height))
+
+    def update(self):
+        pass
+
 #Game constants
 #Colors
 BLACK = (0,0,0)
@@ -277,6 +294,9 @@ ORANGE = (219, 118, 24)
 disp_width = 800
 disp_height = 600
 FPS = 60
+dev_mode = True
+game_port = 6573
+my_ip = socket.gethostbyname(socket.gethostname())
 
 #file paths
 g_dir = os.getcwd()
