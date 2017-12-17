@@ -93,7 +93,6 @@ class Button(pygame.sprite.Sprite):
         #returns a tuple of (x_pos, y_pos, width, height)
         return self.rect
 
-
 #Networking classes
 #In progress networking classes
 class Server:
@@ -167,6 +166,7 @@ class Client:
 
         return data
 
+#entity classes
 class Player(pygame.sprite.Sprite):
     def __init__(self, img_file_tuple, pos):
         pygame.sprite.Sprite.__init__(self)
@@ -283,6 +283,28 @@ class Game(pygame.Surface):
     def update(self):
         pass
 
+class DialogueBox(pygame.Surface):
+    def __init__(self, width, height):
+        pygame.Surface.__init__(self, size=(width, height))
+        self.pos = (width, height)
+        self.border = pygame.draw.rect(self, WHITE, (0, 800-height, width, height))
+        self.border2 = pygame.draw.rect(self, BLACK, (5, 795-height, width-5, height-5))
+
+    def display_text(self, text, size):
+        self.font = pygame.font.Font("freesansbold.ttf", size)
+        self.text_img = self.font.render(text, False, WHITE)
+        self.text_img_rect = self.text_img.get_rect()
+
+    def render(self, display):
+#        self.blit(self.border, (0,0))
+#        self.blit(self.border2, (0,0))
+        self.border = pygame.draw.rect(self, WHITE,
+        #X pos, y pos, width, height
+        (0, 550, self.pos[0], self.pos[1]))
+#        self.border2 = pygame.draw.rect(self, BLACK,
+#        (5, self.pos[1], self.pos[0]-5, self.pos[1]-5))
+        self.blit(self.text_img, (0,0))
+        display.blit(self, (0,0))
 #Game constants
 #Colors
 BLACK = (0,0,0)

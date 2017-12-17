@@ -44,6 +44,10 @@ while menu:
             #msg = testServer.recieve(person)
             #print(msg)
         #testServer.broadcast(msg)
+
+text_box1 = DialogueBox(disp_width, 250)
+text_box1.display_text("Text Box Test", 20)
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -53,15 +57,16 @@ while True:
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 exit()
-            if event.key == pygame.K_W:
+            if event.key == pygame.K_w:
                 pass
-            if event.key == pygame.K_S:
+            if event.key == pygame.K_s:
                 pass
-            if event.key == pygame.K_A:
+            if event.key == pygame.K_a:
                 pass
-            if event.key == pygame.K_D:
+            if event.key == pygame.K_d:
                 pass
 
     gameDisp.fill(BLACK)
+    text_box1.render(gameDisp)
     pygame.display.flip()
     gClock.tick(FPS)
