@@ -287,28 +287,25 @@ class DialogueBox(pygame.Surface):
     def __init__(self, width, height):
         pygame.Surface.__init__(self, size=(width, height))
         self.pos = (width, height)
-        self.border = pygame.draw.rect(self, WHITE, (0, 800-height, width, height))
-        self.border2 = pygame.draw.rect(self, BLACK, (5, 795-height, width-5, height-5))
+        self.RECT = (0, 0, 800, 150)
+        self.INRECT = (5,5, 790, 140)
+        pygame.draw.rect(self, WHITE, self.RECT)
+        pygame.draw.rect(self, BLACK, self.INRECT)
 
     def display_text(self, text, size):
         self.font = pygame.font.Font("freesansbold.ttf", size)
-        self.text_img = self.font.render(text, False, WHITE)
+        self.text_img = self.font.render(text, True, WHITE)
         self.text_img_rect = self.text_img.get_rect()
 
     def render(self, display):
-#        self.blit(self.border, (0,0))
-#        self.blit(self.border2, (0,0))
-        self.border = pygame.draw.rect(self, WHITE,
-        #X pos, y pos, width, height
-        (0, 550, self.pos[0], self.pos[1]))
-#        self.border2 = pygame.draw.rect(self, BLACK,
-#        (5, self.pos[1], self.pos[0]-5, self.pos[1]-5))
-        self.blit(self.text_img, (0,0))
-        display.blit(self, (0,0))
+#        pygame.draw.rect(self, WHITE, self.RECT)
+#        pygame.draw.rect(self, BLACK, self.INRECT)
+       self.blit(self.text_img, (6,6))
+       display.blit(self, (0, self.pos[1]))
 #Game constants
 #Colors
 BLACK = (0,0,0)
-WHITE = (255,255,255)
+WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)

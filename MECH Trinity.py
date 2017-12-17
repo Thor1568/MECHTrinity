@@ -1,4 +1,5 @@
 #Mech Trinity
+#yayuz
 from game_lib import *
 
 pygame.init()
@@ -45,18 +46,22 @@ while menu:
             #print(msg)
         #testServer.broadcast(msg)
 
-text_box1 = DialogueBox(disp_width, 250)
-text_box1.display_text("Text Box Test", 20)
+text_box1 = DialogueBox(disp_width, 450)
+text_box1.display_text("Text Box Test this is good yayuz weee neeed morrreee text MECH TRINITY", 20)
 
 while True:
     for event in pygame.event.get():
+
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+
         if event.type == pygame.KEYDOWN:
+            #Miscellaneous keydown events
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 exit()
+            #Movement keydown events
             if event.key == pygame.K_w:
                 pass
             if event.key == pygame.K_s:
@@ -65,7 +70,7 @@ while True:
                 pass
             if event.key == pygame.K_d:
                 pass
-
+    #Screen updates
     gameDisp.fill(BLACK)
     text_box1.render(gameDisp)
     pygame.display.flip()
