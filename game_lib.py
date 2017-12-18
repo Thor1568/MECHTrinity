@@ -292,7 +292,7 @@ class DialogueBox(pygame.Surface):
         pygame.draw.rect(self, WHITE, self.RECT)
         pygame.draw.rect(self, BLACK, self.INRECT)
 
-    def display_text(self, text, size):
+    def add_text(self, text, size):
         self.font = pygame.font.Font("freesansbold.ttf", size)
         self.text_img_list = []
         self.text_list = ["helo", "help", "holder", "holder", "holder", "holder"]
@@ -329,11 +329,34 @@ class DialogueBox(pygame.Surface):
             self.text_img_list.append(self.text_img)
 
     def render(self, display):
-        y_pos = 5
-        for x in self.text_img_list:
-            self.blit(x, (6, y_pos))
-            y_pos += 20
         display.blit(self, (0, self.pos[1]))
+
+    @threaded
+    def display_text_th(self, speed):
+        y_pos = 5
+        for line in text_img_list:
+            for letter in line:
+                self.blit(line[:letter], (6, y_pos))
+                print("Blitted: %s" % line[:letter])
+                sleep(speed//100)
+            y_pos += 20
+
+#Functions
+def thread_worker(func):
+    def wrapper(*args):
+        my_thread = threading.Thread(target=func, args=args)
+        my_thread.setDaemon(True)
+        my_thread.start()
+        return my_thread
+    return wrapper
+
+
+#Full line blit
+#y_pos = 5
+#for x in self.text_img_list:
+#self.blit(x, (6, y_pos))
+#y_pos += 20
+
 #Game constants
 #Colors
 BLACK = (0,0,0)
