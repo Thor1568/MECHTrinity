@@ -294,14 +294,46 @@ class DialogueBox(pygame.Surface):
 
     def display_text(self, text, size):
         self.font = pygame.font.Font("freesansbold.ttf", size)
-        self.text_img = self.font.render(text, True, WHITE)
-        self.text_img_rect = self.text_img.get_rect()
+        self.text_img_list = []
+        self.text_list = ["helo", "help", "holder", "holder", "holder", "holder"]
+
+        if (len(text) > 71) and (len(text) > 142) and (len(text) < 213):
+            self.text_list[0] = text[:71]
+            self.text_list[1] = text[71:142]
+            self.text_list[2] = text[142:]
+            self.text_img = self.font.render(self.text_list[0], True, WHITE)
+            self.text_img2 = self.font.render(self.text_list[1], True, WHITE)
+            self.text_img3 = self.font.render(self.text_list[2], True, WHITE)
+            self.text_img_rect = self.text_img.get_rect()
+            self.text_img2_rect = self.text_img2.get_rect()
+            self.text_img3_rect = self.text_img2.get_rect()
+            self.text_img_list.append(self.text_img)
+            self.text_img_list.append(self.text_img2)
+            self.text_img_list.append(self.text_img3)
+
+        elif (len(text) > 71) and (len(text) < 142):
+            self.text_list[0] = text[:71]
+            self.text_list[1] = text[71:]
+            print(self.text_list)
+            self.text_img = self.font.render(self.text_list[0], True, WHITE)
+            self.text_img2 = self.font.render(self.text_list[1], True, WHITE)
+            self.text_img_rect = self.text_img.get_rect()
+            self.text_img2_rect = self.text_img2.get_rect()
+            self.text_img_list.append(self.text_img)
+            self.text_img_list.append(self.text_img2)
+
+        elif (len(text) > 71):
+            self.text_list[0] = text[:71]
+            self.text_img = self.font.render(self.text_list[0], True, WHITE)
+            self.text_img_rect = self.text_img.get_rect()
+            self.text_img_list.append(self.text_img)
 
     def render(self, display):
-#        pygame.draw.rect(self, WHITE, self.RECT)
-#        pygame.draw.rect(self, BLACK, self.INRECT)
-       self.blit(self.text_img, (6,6))
-       display.blit(self, (0, self.pos[1]))
+        y_pos = 5
+        for x in self.text_img_list:
+            self.blit(x, (6, y_pos))
+            y_pos += 20
+        display.blit(self, (0, self.pos[1]))
 #Game constants
 #Colors
 BLACK = (0,0,0)
@@ -337,3 +369,4 @@ g_dir = os.getcwd()
 cfig_dir = (os.path.normpath(g_dir+"/config/ ")).strip()
 img_dir = (os.path.normpath(g_dir+"/images/ ")).strip()
 music_dir = (os.path.normpath(g_dir+"/music/ ")).strip()
+play_anim_dir = (os.path.normpath(g_dir+"/images/player_animations/ ")).strip()

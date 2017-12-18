@@ -46,8 +46,11 @@ while menu:
             #print(msg)
         #testServer.broadcast(msg)
 
+text_temp = """Welcome to MECH Trinity, the game designed by Thor1568 as a replacement to the original started in Scratch 2. This game pits humanity against an alien enemy."""
+print(len(text_temp))
+
 text_box1 = DialogueBox(disp_width, 450)
-text_box1.display_text("Text Box Test this is good yayuz weee neeed morrreee text MECH TRINITY", 20)
+text_box1.display_text(text_temp, 20)
 
 while True:
     for event in pygame.event.get():
