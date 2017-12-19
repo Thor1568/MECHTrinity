@@ -7,7 +7,6 @@ import os
 import sys
 import threading
 
-
 #menu_nav scripts
 class menu(pygame.Surface):
     def __init__(self, width, height):
