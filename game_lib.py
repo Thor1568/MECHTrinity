@@ -330,7 +330,7 @@ class DialogueBox(pygame.Surface):
     def render(self, display):
         display.blit(self, (0, self.pos[1]))
 
-    @threaded
+#    @threaded
     def display_text_th(self, speed):
         y_pos = 5
         for line in text_img_list:
@@ -341,13 +341,10 @@ class DialogueBox(pygame.Surface):
             y_pos += 20
 
 #Functions
-def thread_worker(func):
-    def wrapper(*args):
-        my_thread = threading.Thread(target=func, args=args)
-        my_thread.setDaemon(True)
-        my_thread.start()
-        return my_thread
-    return wrapper
+def thread_worker(func, arg):
+    my_thread = threading.Thread(target=func, args=arg)
+    my_thread.setDaemon(True)
+    my_thread.start()
 
 
 #Full line blit
@@ -389,6 +386,14 @@ my_ip = socket.gethostbyname(socket.gethostname())
 #file paths
 g_dir = os.getcwd()
 cfig_dir = (os.path.normpath(g_dir+"/config/ ")).strip()
+#Image directories
 img_dir = (os.path.normpath(g_dir+"/images/ ")).strip()
+misc_img_dir = (os.path.normpath(img_dir+"/misc/ ")).strip()
+plyr_img_dir = (os.path.normpath(img_dir+"/player/ ")).strip()
+ankr_img_dir = (os.path.normpath(img_dir+"/ankar/ ")).strip()
+shai_img_dir = (os.path.normpath(img_dir+"/sheekhai/ ")).strip()
+olpl_img_dir = (os.path.normpath(img_dir+"/olpel/ ")).strip()
+durn_img_dir = (os.path.normpath(img_dir+"/durn/ ")).strip()
+
 music_dir = (os.path.normpath(g_dir+"/music/ ")).strip()
 play_anim_dir = (os.path.normpath(g_dir+"/images/player_animations/ ")).strip()

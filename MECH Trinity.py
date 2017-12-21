@@ -49,8 +49,10 @@ while menu:
 text_temp = """Welcome to MECH Trinity, the game designed by Thor1568 as a replacement to the original started in Scratch 2. This game pits humanity against an alien enemy."""
 #length is 157
 
-text_box1 = DialogueBox(disp_width, 450)
-text_box1.add_text(text_temp, 20)
+#text_box1 = DialogueBox(disp_width, 450)
+#text_box1.add_text(text_temp, 20)
+#Thread keeps getting error: TypeError: display_text_th() argument after * must be an iterable, not int
+#thread_worker(text_box1.display_text_th, 10)
 
 while True:
     for event in pygame.event.get():
@@ -74,8 +76,5 @@ while True:
                 pass
     #Screen updates
     gameDisp.fill(BLACK)
-    handler = text_box1.display_text(10)
-    handler.join()
-    text_box1.render(gameDisp)
     pygame.display.flip()
     gClock.tick(FPS)
