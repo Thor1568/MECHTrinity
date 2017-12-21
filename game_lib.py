@@ -280,7 +280,11 @@ class Game(pygame.Surface):
         pygame.Surface.__init__(self, size=(width, height))
 
     def update(self):
+        #Blits and updates positions of sprites
         pass
+
+    def render(self, display):
+        display.blit(self)
 
 class DialogueBox(pygame.Surface):
     def __init__(self, width, height):
