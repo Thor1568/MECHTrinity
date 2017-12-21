@@ -5,3 +5,10 @@ README PLS
 |============================================|
 
 More stuff later yayuz
+
+Current work:
+Text box animation
+player class
+need artist
+Story development
+Menu design
