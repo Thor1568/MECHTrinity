@@ -10,36 +10,39 @@ import threading
 #menu_nav scripts
 class menu(pygame.Surface):
     def __init__(self, width, height):
+        "Initalizes menu with the start screen"
         pygame.Surface.__init__(self, size=(width, height))
         self.state = 0
-        self.bg_img = pygame.image.load(img_dir+"stars1.png")
-        self.play_button = Button(img_dir+"testbutton.png", (200, 200), "play")
+        self.bg_img = pygame.image.load(misc_img_dir+"stars1.png")
+        self.play_button = Button(misc_img_dir+"testbutton.png", (200, 200), "play")
         self.play_button_text = self.play_button.add_text("Play", 32)
-        self.instruct_button = Button(img_dir+"testbutton.png", (400, 200), "instructions")
+        self.instruct_button = Button(misc_img_dir+"testbutton.png", (400, 200), "instructions")
         self.instruct_button_text = self.instruct_button.add_text("Instructions", 20)
         self.buttons = pygame.sprite.LayeredUpdates()
         self.buttons.add(self.play_button, self.instruct_button)
-        self.button_dict = {
-        0:self.play_button,
-        1:self.instruct_button
-        }
 
     def instructions(self):
+        "Sets menu screen to instructions"
         self.state = 1
 
     def settings(self):
+        "Sets menu screen to settings"
         pass
 
     def credits(self):
+        "Sets menu screen to settings"
         pass
 
     def back(self):
+        "Goes back to previous screen"
         pass
 
     def star_map(self, key_input):
+        "Shows the scrolling star map and passes key_input to it"
         pass
 
     def render(self, display):
+        "Renders the menu on the dislay"
         if self.state == 0:
             self.blit(self.bg_img, (0,0))
             display.blit(self, (0,0))
@@ -54,15 +57,12 @@ class menu(pygame.Surface):
 
 
     def handle_mouse(self, mouse):
-        #Passes mouse tuple to buttons currently drawn on menu
+        "Passes mouse tuple to buttons currently drawn on menu"
         sprite_list = []
         for sprite in self.buttons:
             test = sprite.ifclick(mouse)
             if test:
                 return test
-
-    def spriteID(self, sprite):
-        return self.button_dict[sprite]
 
 class Button(pygame.sprite.Sprite):
     def __init__(self, img_path, pos, name):
@@ -75,21 +75,24 @@ class Button(pygame.sprite.Sprite):
         self.name = name
 
     def ifclick(self, mouse):
+        "Returns the name of the mouse that was clicked"
         if mouse[0] == 1:
             if ((mouse[1] > self.rect.left) and (mouse[1] < self.rect.right)) and ((mouse[2] < self.rect.bottom) and (mouse[2] > self.rect.top)):
                 return self.name
 
     def add_text(self, text, size):
+        "Returns a text surface that will be rendered over the button"
         self.text = text
         self.font = pygame.font.Font("freesansbold.ttf", size)
         self.text_surf = self.font.render(self.text, False, BLACK)
         return self.text_surf
 
     def return_pos(self):
+        "Returns the position attribute"
         return self.place
 
     def return_rect(self):
-        #returns a tuple of (x_pos, y_pos, width, height)
+        "returns a tuple of (x_pos, y_pos, width, height)""
         return self.rect
 
 #Networking classes
@@ -107,7 +110,7 @@ class Server:
         self.conns = []
 
     def work(self):
-        #Function that will be run and maintains connections between each Client and is run by thread
+        "Function that will be run and maintains connections between each Client and is run by thread"
         try:
             c, addr = self.sock.accept()
             self.addresses.append(addr)
@@ -117,17 +120,21 @@ class Server:
 
 
     def recieve(self, connection):
+        "Recieves a message from the connection"
         data = connection.recv(1024)
         data = data.decode()
         return data
 
     def myInfo(self):
+        "Returns info about the socket"
         return (self.addresses, (self.host_name, self.ip, self.port))
 
     def myConns(self):
+        "Returns server connections"
         return self.conns
 
     def broadcast(self, msg):
+        "Broadcasts a message to all clients"
         self.sock.sendall(msg.encode())
 
 class Client:
@@ -138,10 +145,12 @@ class Client:
         #Two connection methods self.connect((ip, port)) or self.create_connection((ip, port))
 
     def make_conn(self, ip):
+        "Connects the client socket to the ip"
         self.ip_conn = ip
         self.sock.connect((ip, self.port))
 
     def myInfo(self):
+        "Returns info about the client socket"
         return (self.host, self.port)
 
     def work(self):
@@ -149,6 +158,7 @@ class Client:
         pass
 
     def transmit(self, data):
+        "Sends information to the server socket"
         data_temp = str(data)
         host_temp = str(self.host)
         data_temp = (data_temp + " " + host_temp)
@@ -158,6 +168,7 @@ class Client:
 
 
     def recieve(self):
+        "Recieves data from the server socket"
         data = self.sock.recv(1024)
         data = tuple(data.decode())
         if data != self.last_send:
@@ -234,7 +245,7 @@ class TileMap:
         self.tmx_map = tm
 
     def render(self):
-        """Renders the tilemap upon the specified surface"""
+        "Renders the tilemap upon the specified surface"
         tID = self.tmx_map.get_tile_image_by_gid
         tiles_group = pygame.sprite.LayeredUpdates()
         for layer in self.tmx_map.visible_layers:
@@ -275,9 +286,24 @@ class myTilemap(pygame.sprite.Sprite):
     def return_img(self):
         return self.image
 
+"""How does the game work?
+Will the game be the tilemap, or will the tilemap be an attribute of the game?
+Planning:
+1. Game will be parent wrapper for other classes defined
+2. Game must handle key_input
+3. Game must handle entities in it
+4. Game must handle pauses
+5. Game must handle 
+
+"""
+
+
+
 class Game(pygame.Surface):
-    def __init__(self, width, height):
+    def __init__(self, width, height, level):
         pygame.Surface.__init__(self, size=(width, height))
+        if level == 0:
+            #Dev level
 
     def update(self):
         #Blits and updates positions of sprites
@@ -296,6 +322,7 @@ class DialogueBox(pygame.Surface):
         pygame.draw.rect(self, BLACK, self.INRECT)
 
     def add_text(self, text, size):
+        "This function adds and orders text on the screen"
         self.font = pygame.font.Font("freesansbold.ttf", size)
         self.text_img_list = []
         self.text_list = ["helo", "help", "holder", "holder", "holder", "holder"]
@@ -332,10 +359,11 @@ class DialogueBox(pygame.Surface):
             self.text_img_list.append(self.text_img)
 
     def render(self, display):
+        "Draws surface on the display"
         display.blit(self, (0, self.pos[1]))
 
-#    @threaded
     def display_text_th(self, speed):
+        "Will draw text on the screen at the speed specified"
         y_pos = 5
         for line in text_img_list:
             for letter in line:

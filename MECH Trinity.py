@@ -53,8 +53,10 @@ text_temp = """Welcome to MECH Trinity, the game designed by Thor1568 as a repla
 #text_box1.add_text(text_temp, 20)
 #Thread keeps getting error: TypeError: display_text_th() argument after * must be an iterable, not int
 #thread_worker(text_box1.display_text_th, 10)
+my_game = Game(800, 600, 0)
 
 while True:
+    gameDisp.fill(BLACK)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -75,6 +77,6 @@ while True:
             if event.key == pygame.K_d:
                 pass
     #Screen updates
-    gameDisp.fill(BLACK)
+    my_game.render(gameDisp)
     pygame.display.flip()
     gClock.tick(FPS)
